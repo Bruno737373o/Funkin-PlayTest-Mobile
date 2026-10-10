@@ -149,14 +149,17 @@ jobs:
         shell: bash
         run: |
           if [ -f Project.xml ]; then
+            # Desativa o bloqueio de editores para alvos móveis
             sed -i 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
             sed -i 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
-            sed -i 's/null-safety/no-null-safety/g' Project.xml
+            
+            # Remove a validação de Null Safety do Project.xml
+            sed -i '/[nN]ull[sS]afety/d' Project.xml
           fi
 
       - name: Build Android
         shell: bash
-        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS -D null-safety=off
+        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS
 
       - name: Upload Android
         uses: actions/upload-artifact@v4
