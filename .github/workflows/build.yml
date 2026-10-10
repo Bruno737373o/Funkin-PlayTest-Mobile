@@ -151,11 +151,12 @@ jobs:
           if [ -f Project.xml ]; then
             sed -i 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
             sed -i 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
+            sed -i 's/null-safety/no-null-safety/g' Project.xml
           fi
 
       - name: Build Android
         shell: bash
-        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS
+        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS -D null-safety=off
 
       - name: Upload Android
         uses: actions/upload-artifact@v4
