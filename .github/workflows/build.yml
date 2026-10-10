@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - preview/public-playtest
   workflow_dispatch:
 
 permissions:
@@ -144,14 +145,22 @@ jobs:
         shell: bash
         run: haxelib run lime rebuild android
 
+      - name: Enable Editors Flag in Project.xml
+        shell: bash
+        run: |
+          if [ -f Project.xml ]; then
+            sed -i 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
+            sed -i 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
+          fi
+
       - name: Build Android
         shell: bash
-        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD
+        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS
 
       - name: Upload Android
         uses: actions/upload-artifact@v4
         with:
-          name: Funkin (PlayTest) (Android)
+          name: Funkin (PlayTest com Editores) (Android)
           path: export/debug/android/**/*.apk
           if-no-files-found: error
           compression-level: 0
@@ -199,9 +208,17 @@ jobs:
         shell: bash
         run: haxelib run lime rebuild ios
 
+      - name: Enable Editors Flag in Project.xml
+        shell: bash
+        run: |
+          if [ -f Project.xml ]; then
+            sed -i '' 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
+            sed -i '' 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
+          fi
+
       - name: Generate Xcode project
         shell: bash
-        run: haxelib run lime update ios -debug -DGITHUB_BUILD -DNO_FEATURE_CPPIA
+        run: haxelib run lime update ios -debug -DGITHUB_BUILD -DNO_FEATURE_CPPIA -DFEATURE_EDITORS -DEDITORS
 
       - name: Cache Xcode DerivedData
         uses: actions/cache@v4
@@ -251,8 +268,9 @@ jobs:
       - name: Upload iOS
         uses: actions/upload-artifact@v4
         with:
-          name: Funkin (PlayTest) (iOS)
+          name: Funkin (PlayTest com Editores) (iOS)
           path: ${{ env.IPA_PATH }}
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
+          
