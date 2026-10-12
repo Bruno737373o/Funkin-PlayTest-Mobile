@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - preview/public-playtest
+      - master
   workflow_dispatch:
 
 permissions:
@@ -21,7 +21,6 @@ jobs:
   android:
     name: Android
     runs-on: ubuntu-latest
-    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -145,136 +144,15 @@ jobs:
         shell: bash
         run: haxelib run lime rebuild android
 
-      - name: Enable Editors Flag in Project.xml
-        shell: bash
-        run: |
-          if [ -f Project.xml ]; then
-            # Desativa o bloqueio de editores para alvos móveis
-            sed -i 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
-            sed -i 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
-            
-            # Remove a validação de Null Safety do Project.xml
-            sed -i '/[nN]ull[sS]afety/d' Project.xml
-          fi
-
       - name: Build Android
         shell: bash
-        run: haxelib run lime build android -arm64 -debug -DGITHUB_BUILD -DFEATURE_EDITORS -DEDITORS
+        run: haxelib run lime build android -arm64 -release -DGITHUB_BUILD
 
       - name: Upload Android
         uses: actions/upload-artifact@v4
         with:
-          name: Funkin (PlayTest com Editores) (Android)
-          path: export/debug/android/**/*.apk
+          name: Funkin (Android Release)
+          path: export/release/android/**/*.apk
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
-
-  ios:
-    name: iOS
-    runs-on: macos-latest
-    timeout-minutes: 60
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 1
-
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@v2
-        with:
-          haxe-version: ${{ env.HAXE_VERSION }}
-
-      - name: Install HMM
-        shell: bash
-        run: haxelib install hmm --quiet
-
-      - name: Install dependencies
-        shell: bash
-        run: |
-          rm -rf .haxelib
-          haxelib run hmm install
-
-      - name: Build hxcpp
-        shell: bash
-        run: |
-          HXCPP_PATH=$(haxelib libpath hxcpp | tr -d '\n')
-          cd "$HXCPP_PATH/tools/hxcpp"
-          haxe compile.hxml
-
-      - name: Rebuild Lime
-        shell: bash
-        run: haxelib run lime rebuild cpp
-
-      - name: Rebuild Lime iOS
-        shell: bash
-        run: haxelib run lime rebuild ios
-
-      - name: Enable Editors Flag in Project.xml
-        shell: bash
-        run: |
-          if [ -f Project.xml ]; then
-            sed -i '' 's/name="NO_FEATURE_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
-            sed -i '' 's/name="NO_EDITORS"/name="FORCE_DISABLE_EDITORS_DISABLED"/g' Project.xml
-          fi
-
-      - name: Generate Xcode project
-        shell: bash
-        run: haxelib run lime update ios -debug -DGITHUB_BUILD -DNO_FEATURE_CPPIA -DFEATURE_EDITORS -DEDITORS
-
-      - name: Cache Xcode DerivedData
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: xcode-derived-data-ios-${{ hashFiles('hmm.json') }}
-          restore-keys: |
-            xcode-derived-data-ios-
-
-      - name: Build iOS (unsigned)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cd export/debug/ios
-
-          xcodebuild build \
-            -project Funkin.xcodeproj \
-            -target Funkin \
-            -configuration Debug \
-            -sdk iphoneos \
-            -derivedDataPath "$HOME/Library/Developer/Xcode/DerivedData" \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            CONFIGURATION_BUILD_DIR=build/Debug-iphoneos
-
-      - name: Package iOS app
-        shell: bash
-        run: |
-          set -euo pipefail
-          BUILD_DIR=export/debug/ios/build/Debug-iphoneos
-
-          cd "$BUILD_DIR"
-          APP_PATH=$(find . -maxdepth 1 -name "*.app")
-
-          if [ -z "$APP_PATH" ]; then
-            echo "Could not find .app bundle in $BUILD_DIR"
-            exit 1
-          fi
-
-          mkdir -p Payload
-          cp -r "$APP_PATH" Payload/
-          zip -r Funkin_PlayTest_iOS.ipa Payload
-          echo "IPA_PATH=$BUILD_DIR/Funkin_PlayTest_iOS.ipa" >> "$GITHUB_ENV"
-
-      - name: Upload iOS
-        uses: actions/upload-artifact@v4
-        with:
-          name: Funkin (PlayTest com Editores) (iOS)
-          path: ${{ env.IPA_PATH }}
-          if-no-files-found: error
-          compression-level: 0
-          retention-days: 14
-          

@@ -1,0 +1,8 @@
+{
+  "name": "Funkin' PlayTest",
+  "description": "Friday Night Funkin' Mobile PlayTest rhythm game featuring mobile touch hitboxes, authentic charts, audio timing engine, Freeplay, Story mode, and calibration settings.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

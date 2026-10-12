@@ -1,66 +1,36 @@
-<div align='center'><img src="docs/readme_images/FNF_logo.png" width="800">
+# Friday Night Funkin' PlayTest Mobile (Android)
 
-<h2>Friday Night Funkin' is a rhythm game. Built using HaxeFlixel for <a href="https://ldjam.com/events/ludum-dare/47">Ludum Dare 47.</a></h2>
+A native Android rhythm game application rewritten in Kotlin and Jetpack Compose, featuring Friday Night Funkin' gameplay, mobile touch hitboxes, and an advanced Debug Suite.
 
-This game was made with love to Newgrounds and its community. Extra love to Tom Fulp.
+## Features
 
-</div>
+- **Rhythm Engine & Gameplay**:
+  - 4-direction strumline notes (Left, Down, Up, Right) with custom neon glowing arrows and receptors.
+  - Multi-touch 4-column touch hitbox overlay calibrated for Android devices.
+  - Authentic FNF timing and judgements: `SICK!!` (350), `GOOD` (200), `BAD` (100), `SHIT` (50), and `MISS` (-100).
+  - Dynamic dual-color health bar with animated Boyfriend and Opponent heads reacting to health states.
+  - Expressive character stage view with BF, GF, and Opponents dancing and singing to the beat.
+  - Low-latency procedural synth engine providing real beat playback, bass drums, snares, hi-hats, and BoyFriend/Opponent voice tones.
 
-- [Playable web demo on Newgrounds!](https://www.newgrounds.com/portal/view/770371)
-- [Demo download builds for Windows, Mac, and Linux from Itch.io!](https://ninja-muffin24.itch.io/funkin)
-- [Download Android builds from Google Play!](https://play.google.com/store/apps/details?id=me.funkin.fnf)
-- [Download iOS builds from the App Store!](https://apps.apple.com/app/id6740428530)
+- **Debug Menu Suite** *(New)*:
+  - **Chart Editor & Chart Tester**: Interactive 16-step grid per measure with real-time note placement and instant playtesting.
+  - **Song Warp**: Direct jump to any track (Tutorial through Week 7) and difficulty level.
+  - **Audio & Latency Calibration**: Metronome tap box to measure audio-visual latency and save custom offsets.
+  - **Gameplay Modifiers**: Botplay toggle, God Mode (practice), Ghost Tapping toggle, Downscroll toggle, and Hitbox Opacity slider.
+  - **Animation & Sprite Inspector**: Preview character singing poses and reactions.
 
-<div align='center'>
-<table>
-  <tr>
-    <td><img src="docs/readme_images/Title_Card.gif" alt="Title Screen" width="350"/></td>
-    <td><img src="docs/readme_images/Menu.png" alt="Main Menu" width="350"/></td>
-  </tr>
-</table>
-</div>
+- **Game Modes**:
+  - **Story Mode**: Play through weekly battles across Tutorial, Week 1, Week 2, Week 3, Week 4, Week 6, and Week 7.
+  - **Freeplay**: Select any track, preview beats, switch difficulties (Easy, Normal, Hard, Erect, Nightmare), and track personal high scores.
+  - **Options & Customization**: Hitbox opacity, downscroll, ghost tapping, haptic feedback, and note splashes.
 
-# Getting Started
+## Architecture
 
-**PLEASE USE THE LINKS ABOVE IF YOU JUST WANT TO PLAY THE GAME**
+- **Language**: Kotlin 2.1
+- **UI Framework**: Jetpack Compose with Material Design 3
+- **Audio Engine**: Low-latency procedural `AudioTrack` PCM synthesizer
+- **Build System**: Gradle 9.3.1 (Kotlin DSL) with Android Gradle Plugin 8.9.0
 
-To learn how to install the necessary dependencies and compile the game from source, please follow our [Compiling Guide](/docs/COMPILING.md).
+## License
 
-# Contributing
-
-Check out our [Contributing Guide](/docs/CONTRIBUTING.md) to learn how you can actively contribute to the development of Friday Night Funkin'!
-
-# Modding
-
-Feel free to start learning to mod the game by reading our [documentation](https://funkincrew.github.io/funkin-modding-docs/) and guide to modding.
-
-# Credits and Special Thanks
-
-Full credits can be found in-game, or in the `credits.json` file which is located [here](https://github.com/FunkinCrew/funkin.assets/blob/main/exclude/data/credits.json).
-
-## Programming
-- [ninjamuffin99](https://twitter.com/ninja_muffin99) - Lead Programmer
-- [EliteMasterEric](https://twitter.com/EliteMasterEric) - Programmer
-- [MtH](https://twitter.com/emmnyaa) - Charting and Additional Programming
-- [GeoKureli](https://twitter.com/Geokureli/) - Additional Programming
-- [ZackDroid](https://x.com/ZackDroidCoder) - Lead Mobile Programmer
-- [MAJigsaw77](https://github.com/MAJigsaw77) - Mobile Programmer
-- [Karim-Akra](https://x.com/KarimAkra_0) - Mobile Programmer
-- [Sector_5](https://github.com/sector-a) - Mobile Programmer
-- [Luckydog7](https://github.com/luckydog7) - Mobile Programmer
-- Our contributors on GitHub
-
-## Art / Animation / UI
-- [PhantomArcade3K](https://twitter.com/phantomarcade3k) - Artist and Animator
-- [Evilsk8r](https://twitter.com/evilsk8r) - Art
-- [Moawling](https://twitter.com/moawko) - Week 6 Pixel Art
-- [IvanAlmighty](https://twitter.com/IvanA1mighty) - Misc UI Design
-
-## Music
-- [Kawaisprite](https://twitter.com/kawaisprite) - Musician
-- [BassetFilms](https://twitter.com/Bassetfilms) - Music for "Monster", Additional Character Design
-
-## Special Thanks
-- [Tom Fulp](https://twitter.com/tomfulp) - For being a great guy and for Newgrounds
-- [JohnnyUtah](https://twitter.com/JohnnyUtahNG/) - Voice of Tankman
-- [L0Litsmonica](https://twitter.com/L0Litsmonica) - Voice of Mommy Mearest
+Apache License 2.0. Friday Night Funkin' assets and characters are copyright The Funkin' Crew.
